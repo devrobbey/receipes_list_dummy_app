@@ -1,8 +1,10 @@
-
 import 'package:flutter/material.dart';
+import 'package:receipts_list_dummy_app/pages/add_receipt/add_receipt_page.dart';
 
-class ReceiptsPage extends StatelessWidget{
-  const ReceiptsPage({Key? key,}) : super(key: key);
+class ReceiptsPage extends StatelessWidget {
+  const ReceiptsPage({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,10 +20,11 @@ class ReceiptsPage extends StatelessWidget{
           ],
         ),
       ),
-      floatingActionButton: const FloatingActionButton(
-        onPressed: null,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Navigator.of(context)
+            .push(MaterialPageRoute(builder: (_) => AddReceiptPage())),
         tooltip: 'Increment',
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }

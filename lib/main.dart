@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:receipts_list_dummy_app/pages/add_receipt/add_receipt_page.dart';
+import 'package:receipts_list_dummy_app/pages/receipts_page/receipts_page.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
@@ -11,7 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Receipts Demo App',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
