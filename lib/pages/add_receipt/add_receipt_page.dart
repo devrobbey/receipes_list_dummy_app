@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'add_receipt_bloc.dart';
+import 'components/camera_section.dart';
 
 class AddReceiptPage extends StatefulWidget {
   const AddReceiptPage({
@@ -37,34 +38,7 @@ class _AddReceiptPageState extends State<AddReceiptPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              FutureBuilder<List<CameraDescription>>(
-                  future: camerasFuture,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Text('Loading cameras...');
-                    } else if (snapshot.hasError) {
-                      return const Text('Error loading camera');
-                    } else if (snapshot.data!.isEmpty) {
-                      return const Text('Your device seems to have no camera ...');
-                    }
-
-                    controller =
-                        CameraController(snapshot.data![0], ResolutionPreset.max);
-
-                    return FutureBuilder<void>(
-                        future: controller!.initialize(),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState == ConnectionState.waiting) {
-                            return const Text('Waiting for camera controller ...');
-                          }
-                          return ElevatedButton(
-                            onPressed: () => Navigator.of(context).push(
-                                MaterialPageRoute(
-                                    builder: (_) => CameraPreview(controller!,))),
-                            child: const Icon(Icons.camera_alt),
-                          );
-                        });
-                  }),
+              CameraSection(),
             ],
           ),
         ),

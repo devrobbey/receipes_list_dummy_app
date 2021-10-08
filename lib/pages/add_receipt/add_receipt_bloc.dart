@@ -15,12 +15,15 @@ class AddReceiptBloc extends Bloc<AddReceiptEvent, AddReceiptState> {
   final Future<List<CameraDescription>> camerasFuture = availableCameras();
 
   void _onInitCam(InitCam event, Emitter<AddReceiptState> emit) async {
-    availableCameras().then((cams) {
+    // get available cameras
+    availableCameras().then((cams) async {
       if (cams.isEmpty) {
         emit(CamInitError());
       } else {
-        emit(CamInitialised(
-            controller: CameraController(cams[0], ResolutionPreset.max)));
+        // wait for camera controller to be initialized
+        final controller = CameraController(cams[0], ResolutionPreset.max);
+        await controller.initialize();
+        emit(CamInitialised(controller: controller));
       }
     }).catchError((error, stackTrace) {
       _logger.log('cam init error', error: error);
@@ -85,10 +88,10 @@ class CamInitError extends AddReceiptState {}
 class CamInitialised extends AddReceiptState {
   const CamInitialised({required this.controller});
 
-  final CameraController? controller;
+  final CameraController controller;
 
   @override
-  List<Object> get props => [controller.hashCode];
+  List<Object> get props => [controller];
 
   @override
   String toString() => 'CamInitialised { controller: $controller }';
