@@ -46,9 +46,10 @@ class _AddReceiptPageState extends State<AddReceiptPage> {
                     return const Text('Loading cameras...');
                   } else if (snapshot.hasError) {
                     return const Text('Error loading camera');
+                  } else if (snapshot.data!.isEmpty) {
+                    return const Text('Your device seems to have no camera ...');
                   }
 
-                  print(snapshot.data);
                   controller =
                       CameraController(snapshot.data![0], ResolutionPreset.max);
 
@@ -61,7 +62,7 @@ class _AddReceiptPageState extends State<AddReceiptPage> {
                         return ElevatedButton(
                           onPressed: () => Navigator.of(context).push(
                               MaterialPageRoute(
-                                  builder: (_) => CameraPreview(controller!))),
+                                  builder: (_) => CameraPreview(controller!,))),
                           child: const Icon(Icons.camera_alt),
                         );
                       });
