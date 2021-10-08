@@ -16,7 +16,7 @@ class AddReceiptBloc extends Bloc<AddReceiptEvent, AddReceiptState> {
 
   void _onInitCam(InitCam event, Emitter<AddReceiptState> emit) async {
     // get available cameras
-    availableCameras().then((cams) async {
+    await availableCameras().then((cams) async {
       if (cams.isEmpty) {
         emit(CamInitError());
       } else {
@@ -95,42 +95,4 @@ class CamInitialised extends AddReceiptState {
 
   @override
   String toString() => 'CamInitialised { controller: $controller }';
-}
-
-////////////////////////////////////////////////////////////
-////////////
-////////////    FORMFIELD MODELS (for Formz)
-////////////
-////////////////////////////////////////////////////////////
-
-enum MailValidationError { invalid }
-
-class Mail extends FormzInput<String, MailValidationError> {
-  const Mail.pure([String value = '']) : super.pure(value);
-
-  const Mail.dirty([String value = '']) : super.dirty(value);
-
-  @override
-  MailValidationError? validator(String value) {
-    return RegExp(
-                r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$')
-            .hasMatch(value)
-        ? null
-        : MailValidationError.invalid;
-  }
-}
-
-enum PasswordValidationError { invalid }
-
-class Password extends FormzInput<String, PasswordValidationError> {
-  const Password.pure([String value = '']) : super.pure(value);
-
-  const Password.dirty([String value = '']) : super.dirty(value);
-
-  @override
-  PasswordValidationError? validator(String value) {
-    return RegExp(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$').hasMatch(value)
-        ? null
-        : PasswordValidationError.invalid;
-  }
 }
