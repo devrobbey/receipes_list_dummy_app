@@ -1,8 +1,6 @@
-import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:camera/camera.dart';
 import 'package:equatable/equatable.dart';
-import 'package:formz/formz.dart';
 import 'package:receipts_list_dummy_app/util/logger.dart';
 
 class AddReceiptBloc extends Bloc<AddReceiptEvent, AddReceiptState> {
@@ -11,8 +9,6 @@ class AddReceiptBloc extends Bloc<AddReceiptEvent, AddReceiptState> {
   }
 
   static const _logger = Logger('AddReceiptBloc');
-
-  final Future<List<CameraDescription>> camerasFuture = availableCameras();
 
   void _onInitCam(InitCam event, Emitter<AddReceiptState> emit) async {
     // get available cameras

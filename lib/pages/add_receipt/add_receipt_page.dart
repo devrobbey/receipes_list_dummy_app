@@ -2,6 +2,10 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:receipts_list_dummy_app/pages/add_receipt/components/ingredients_section.dart';
+import 'package:receipts_list_dummy_app/pages/add_receipt/components/subtitle_field.dart';
+import 'package:receipts_list_dummy_app/pages/add_receipt/components/title_field.dart';
+import 'package:receipts_list_dummy_app/pages/add_receipt/components/working_steps_section.dart';
 
 import 'add_receipt_bloc.dart';
 import 'components/camera_section.dart';
@@ -36,16 +40,19 @@ class _AddReceiptPageState extends State<AddReceiptPage> {
         ),
         body: Center(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
+            children: const <Widget>[
               CameraSection(),
+              TitleField(),
+              SubtitleField(),
+              IngredientsSection(),
+              WorkingStepsSection(),
             ],
           ),
         ),
         floatingActionButton: const FloatingActionButton(
           onPressed: null,
           tooltip: 'Increment',
-          child: Icon(Icons.add),
+          child: Icon(Icons.check),
         ),
       ),
     );
