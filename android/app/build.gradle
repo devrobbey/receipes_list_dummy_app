@@ -46,6 +46,7 @@ android {
         applicationId "com.example.receipes_list_dummy_app"
         minSdkVersion 16
         targetSdkVersion 30
+        multiDexEnabled true
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
