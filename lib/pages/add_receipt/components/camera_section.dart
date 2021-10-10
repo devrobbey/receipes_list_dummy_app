@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
@@ -13,23 +15,47 @@ class CameraSection extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: BlocBuilder<AddReceiptBloc, AddReceiptState>(
-        builder: (context, state) {
-          if (state is Uninitialized || state is CamInitInProgress) {
-            return const Text('Cam init in progress ...');
-          } else if (state is CamInitError) {
-            return const Text('Cam init error or no cam available');
-          } else if (state is CamInitialised) {
-            return ElevatedButton(
-              onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute(
-                      builder: (_) => CameraPreview(state.controller,))),
-              child: const Icon(Icons.camera_alt),
-            );
-          }
-          return Container();
-        }
-      ),
+          builder: (context, state) {
+        return Column(
+          children: [
+            if (state is Valid && state.xFile != null)
+              FutureBuilder<Uint8List>(
+                future: File(state.xFile!.path).readAsBytes(),
+                builder:
+                    (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                  if (snapshot.hasData) {
+                    return SizedBox(
+                      height: 200,
+                      width: 200,
+                      child: Image.memory(snapshot.data),
+                    );
+                  }
+                  return Container();
+                },
+              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: state is! Valid ||
+                          (state is Valid && state.controller == null)
+                      ? null
+                      : () => Navigator.of(context).push(MaterialPageRoute(
+                          builder: (_) => CameraPreview(
+                                state.controller!,
+                              ))),
+                  child: const Icon(Icons.camera_alt),
+                ),
+                ElevatedButton(
+                  onPressed: () => BlocProvider.of<AddReceiptBloc>(context)
+                      .add(UploadImageButtonPressed()),
+                  child: const Icon(Icons.upload),
+                ),
+              ],
+            ),
+          ],
+        );
+      }),
     );
   }
-
 }
