@@ -24,6 +24,7 @@ dependencies:
   # Google stuff
   firebase_core: ^1.7.0
   firebase_storage: ^10.0.5
+  google_maps_flutter: ^2.1.0
 
   cupertino_icons: ^1.0.2
 
