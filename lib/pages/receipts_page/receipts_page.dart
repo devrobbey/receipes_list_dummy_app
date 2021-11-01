@@ -1,20 +1,46 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:gpx/gpx.dart';
 import 'package:receipts_list_dummy_app/pages/add_receipt/add_receipt_page.dart';
 
-class ReceiptsPage extends StatelessWidget {
-  ReceiptsPage({
+class ReceiptsPage extends StatefulWidget {
+  const ReceiptsPage({
     Key? key,
+    required this.gpx,
   }) : super(key: key);
 
+  final Gpx gpx;
+
+  static const CameraPosition _kHamburgAlster = CameraPosition(
+    target: LatLng(53.563838, 9.999523),
+    zoom: 12.4746,
+  );
+
+  @override
+  State<ReceiptsPage> createState() => _ReceiptsPageState();
+}
+
+class _ReceiptsPageState extends State<ReceiptsPage> {
   final Completer<GoogleMapController> _controller = Completer();
 
-  static final CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 14.4746,
-  );
+  Set<Polyline> _polylines = <Polyline>{};
+
+  @override
+  void initState() {
+    super.initState();
+    _polylines.add(Polyline(
+      visible: true,
+      color: Colors.blue,
+      width: 5,
+      polylineId: PolylineId('123'),
+      points: widget.gpx.trks.first.trksegs.first.trkpts
+          .map<LatLng>((trkpts) => LatLng(trkpts.lat!, trkpts.lon!))
+          .toList(),
+    ));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +55,11 @@ class ReceiptsPage extends StatelessWidget {
             SizedBox(
               height: 300,
               child: GoogleMap(
+                rotateGesturesEnabled: false,
+                buildingsEnabled: false,
                 mapType: MapType.hybrid,
-                initialCameraPosition: _kGooglePlex,
+                polylines: _polylines,
+                initialCameraPosition: ReceiptsPage._kHamburgAlster,
                 onMapCreated: (GoogleMapController controller) {
                   _controller.complete(controller);
                 },
